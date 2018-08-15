@@ -52,12 +52,18 @@ object demo extends App with ScalaStan {
     .map(item =>
       Point(item._2 + 0.5, (item._1 - scalaEloStats._1) / scalaEloStats._2))
 
+  results.summary(System.out)
+
   val scalaEloDoubles: Seq[Double] = results
     .mean(skillVector)
 
   val boxStats: Seq[Seq[Double]] =
     results.samples(skillVector).flatten.transpose
+
+  dataVisualization.visualizePriors(
+    divMuInitial.zipWithIndex.map(pair => Point(pair._2 + 0.5, pair._1)))
   dataVisualization.initialBox(boxStats)
   dataVisualization.sortedColoredPlot(scalaEloDoubles)
+  dataVisualization.stackedComparison(scalaElo)
   dataVisualization.outputVisualization(scalaElo)
 }

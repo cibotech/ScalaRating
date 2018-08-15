@@ -5,5 +5,7 @@ lazy val demo = (project in file(".")).settings(
   resolvers += Resolver.bintrayRepo("cibotech", "public"),
   libraryDependencies += "com.cibo" %% "evilplot" % "0.4.1", // Use %%% instead of %% if you're using ScalaJS
   resolvers += Resolver.bintrayRepo("cibotech", "public"),
-  libraryDependencies += "com.cibo" %% "scalastan" % "0.5.8"
+  libraryDependencies += "com.cibo" %% "scalastan" % "0.5.8",
+  resolvers += Resolver.bintrayRepo("cibotech", "public"),
+  libraryDependencies += "com.cibo" %% "evilplot-repl" % "0.4.1"
 )
