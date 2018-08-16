@@ -1,4 +1,4 @@
-case class team(name: String) {
+case class Team(name: String) {
   val getID: Int = {
     name match {
       case "ATL" => 1

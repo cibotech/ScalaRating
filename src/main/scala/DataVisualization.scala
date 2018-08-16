@@ -18,38 +18,38 @@ import com.cibo.evilplot.plot.aesthetics.DefaultTheme._
 import com.cibo.evilplot.plot.components.{Marker, Position}
 import com.cibo.evilplot.plot.renderers.{BarRenderer, PointRenderer}
 
-object dataVisualization {
+object DataVisualization {
   val teams = Seq(
-    team("ATL"),
-    team("BKN"),
-    team("BOS"),
-    team("CHA"),
-    team("CHI"),
-    team("CLE"),
-    team("DAL"),
-    team("DEN"),
-    team("DET"),
-    team("GSW"),
-    team("HOU"),
-    team("IND"),
-    team("LAC"),
-    team("LAL"),
-    team("MEM"),
-    team("MIA"),
-    team("MIL"),
-    team("MIN"),
-    team("NOP"),
-    team("NYK"),
-    team("OKC"),
-    team("ORL"),
-    team("PHI"),
-    team("PHX"),
-    team("POR"),
-    team("SAC"),
-    team("SAS"),
-    team("TOR"),
-    team("UTA"),
-    team("WAS")
+    Team("ATL"),
+    Team("BKN"),
+    Team("BOS"),
+    Team("CHA"),
+    Team("CHI"),
+    Team("CLE"),
+    Team("DAL"),
+    Team("DEN"),
+    Team("DET"),
+    Team("GSW"),
+    Team("HOU"),
+    Team("IND"),
+    Team("LAC"),
+    Team("LAL"),
+    Team("MEM"),
+    Team("MIA"),
+    Team("MIL"),
+    Team("MIN"),
+    Team("NOP"),
+    Team("NYK"),
+    Team("OKC"),
+    Team("ORL"),
+    Team("PHI"),
+    Team("PHX"),
+    Team("POR"),
+    Team("SAC"),
+    Team("SAS"),
+    Team("TOR"),
+    Team("UTA"),
+    Team("WAS")
   )
 
   def initialBox(results: Seq[Seq[Double]]): Unit = {
@@ -81,7 +81,7 @@ object dataVisualization {
     displayPlot(scatter)
   }
 
-  def outputVisualization(scalaElo: Seq[Point]): Unit = {
+  def outputVisualization(scalaRating: Seq[Point]): Unit = {
 
     val initialEloValues: Seq[Double] = teams.map(team => team.getStats._2)
     val initialEloStats = BasicStats.stats(initialEloValues)
@@ -94,7 +94,7 @@ object dataVisualization {
       Point(item._2 + 0.5, (item._1 - recordEloStats._1) / recordEloStats._2))
 
     val allDifferences = BasicStats.averageDist(teams.indices.map(i =>
-      Seq(scalaElo(i).y, initialElo(i).y, recordElo(i).y)))
+      Seq(scalaRating(i).y, initialElo(i).y, recordElo(i).y)))
 
     val discRenderer = new BarRenderer {
       def render(plot: Plot, extent: Extent, category: Bar): Drawable = {
@@ -113,8 +113,8 @@ object dataVisualization {
                          "Win/Loss Record",
                          HTMLNamedColors.green,
                          pointSize = Some(6)),
-      ScatterPlot.series(scalaElo,
-                         "Scala ELO",
+      ScatterPlot.series(scalaRating,
+                         "ScalaStan Rating",
                          HTMLNamedColors.red,
                          pointSize = Some(6))
     ).topPlot(BarChart.custom(allDifferences.map(i => Bar(i)),
@@ -129,7 +129,7 @@ object dataVisualization {
 
   }
 
-  def stackedComparison(scalaElo: Seq[Point]): Unit = {
+  def stackedComparison(scalaRating: Seq[Point]): Unit = {
 
     val initialEloValues: Seq[Double] = teams.map(team => team.getStats._2)
     val initialEloStats = BasicStats.stats(initialEloValues)
@@ -142,13 +142,13 @@ object dataVisualization {
       Point(item._2 + 0.5, (item._1 - recordEloStats._1) / recordEloStats._2))
 
     val stackedBars: Seq[Seq[Double]] = teams.indices.map(i =>
-      Seq(scalaElo(i).y, initialElo(i).y, recordElo(i).y))
+      Seq(scalaRating(i).y, initialElo(i).y, recordElo(i).y))
     val barChart = BarChart
       .stacked(stackedBars,
                Seq(HTMLNamedColors.red,
                    HTMLNamedColors.blue,
                    HTMLNamedColors.green),
-               Seq("Scala Elo", "538 Elo", "Win/Loss Record"))
+               Seq("ScalaStan Rating", "538 Elo", "Win/Loss Record"))
       .component(
         Marker(Position.Overlay,
                _ => Text("< Champs!", 20) rotated (-90),
