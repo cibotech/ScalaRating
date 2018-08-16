@@ -1,5 +1,5 @@
-# ScalaElo
-Elo as calculated in ScalaStan
+# Scala Rating
+NBA ratings as calculated in ScalaStan
 
 # Instructions
 1. Run `sbt compile`
