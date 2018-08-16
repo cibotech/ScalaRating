@@ -1,4 +1,4 @@
-# scalaElo
+# ScalaElo
 Elo as calculated in ScalaStan
 
 # Instructions
