@@ -1,7 +1,4 @@
-import java.io.File
-
 import com.cibo.evilplot.colors.{
-  Color,
   ContinuousColoring,
   GradientMode,
   HTMLNamedColors
@@ -13,7 +10,6 @@ import com.cibo.evilplot.plot.{
   Bar,
   BarChart,
   BoxPlot,
-  LinePlot,
   Overlay,
   Plot,
   ScatterPlot
@@ -68,12 +64,12 @@ object dataVisualization {
       ContinuousColoring.gradient(Seq(HTMLNamedColors.dodgerBlue,
                                       HTMLNamedColors.crimson,
                                       HTMLNamedColors.green),
-                                  Some(-1.0),
-                                  Some(2.0),
+                                  Some(-0.5),
+                                  Some(1.8),
                                   GradientMode.Linear)
     val sortedPairs = results.zip(teams).sortBy(_._1)
     val depthPointRender =
-      PointRenderer.depthColor(sortedPairs.map(_._1), Some(colors))
+      PointRenderer.depthColor(sortedPairs.map(_._1), Some(colors), Some(8.0))
 
     val scatter = ScatterPlot(sortedPairs.map(_._1).zipWithIndex.map {
       case (y, x) => Point(x - 0.5, y)
@@ -103,18 +99,28 @@ object dataVisualization {
     val discRenderer = new BarRenderer {
       def render(plot: Plot, extent: Extent, category: Bar): Drawable = {
         Disc(extent.height)
-          .translate(extent.width / 2 - extent.height, 0)
+          .transX(extent.width / 2 - extent.height)
           .filled(HTMLNamedColors.grey)
       }
     }
 
     val lines = Overlay(
-      LinePlot.series(scalaElo, "Scala ELO", HTMLNamedColors.red),
-      LinePlot.series(initialElo, "538 Initial ELO", HTMLNamedColors.blue),
-      LinePlot.series(recordElo, "Win/Loss Record", HTMLNamedColors.green)
-    ).topPlot(BarChart(allDifferences))
+      ScatterPlot.series(initialElo,
+                         "538 Initial ELO",
+                         HTMLNamedColors.blue,
+                         pointSize = Some(6)),
+      ScatterPlot.series(recordElo,
+                         "Win/Loss Record",
+                         HTMLNamedColors.green,
+                         pointSize = Some(6)),
+      ScatterPlot.series(scalaElo,
+                         "Scala ELO",
+                         HTMLNamedColors.red,
+                         pointSize = Some(6))
+    ).topPlot(BarChart.custom(allDifferences.map(i => Bar(i)),
+                               barRenderer = Some(discRenderer)))
       .standard(teams.map(_.name))
-      .xGrid(Some(60))
+      .xGrid(Some(30))
       .rightLegend()
       .hline(0.0)
       .render(Extent(1500, 600))

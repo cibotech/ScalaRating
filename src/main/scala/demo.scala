@@ -21,7 +21,7 @@ object demo extends App with ScalaStan {
 
   val model = new Model {
     for (team <- range(1, n)) {
-      skillVector(team) ~ stan.normal(divMu(team), sigma = 1)
+      skillVector(team) ~ stan.normal(divMu(team), sigma = 0.5)
     }
     for (game <- range(1, m)) {
       val teamA = teamsA(game)
